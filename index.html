@@ -30,7 +30,9 @@
             if (event.key === 'step3-close') {
               setTimeout(() => {
                 window2.close();
-              }, 10); // TODO: shorten timeout
+                document.body.removeChild(button);
+                alert('Thanks!');
+              }, 50);
             }
           };
         };
