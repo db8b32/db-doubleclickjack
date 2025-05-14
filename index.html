@@ -58,8 +58,12 @@
         button.style.height = height + 'px';
         button.style.backgroundColor = 'red';
         button.onclick = () => {
-          localStorage.setItem('step3-close', Math.random().toString());
-          window.close();
+          if (button.style.backgroundColor == 'green') {
+            localStorage.setItem('step3-close', Math.random().toString());
+            window.close();
+          } else {
+            alert('button was not green');
+          }
         };
         const stage = () => {
           opener.location = 'https://www.dropbox.com/cli_link_nonce?' + new URLSearchParams({ nonce: nonce }).toString();
