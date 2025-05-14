@@ -18,6 +18,7 @@
       const step = searchParams.get('step') || '1';
       const step2URL = '?' + new URLSearchParams({ step: 2, nonce: nonce }).toString();
       const step3URL = '?' + new URLSearchParams({ step: 3, nonce: nonce }).toString();
+      const debug = searchParams.get('debug') == 'true';
 
       if (step === '1') {
         const button = document.createElement('button');
@@ -59,7 +60,9 @@
         button.style.backgroundColor = 'red';
         button.onclick = () => {
           if (button.style.backgroundColor == 'green') {
-            localStorage.setItem('step3-close', Math.random().toString());
+            if (!debug) {
+              localStorage.setItem('step3-close', Math.random().toString());
+            }
             window.close();
           } else {
             alert('button was not green');
