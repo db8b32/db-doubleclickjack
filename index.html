@@ -75,11 +75,13 @@
           }, 3000);
         };
         const unstage = () => {
-          opener.location = step2URL;
+          setTimeout(() => {
+            opener.location = step2URL;
+          }, 500);
         };
         button.onmouseenter = stage;
         button.onmouseleave = unstage;
-        // window.onblur = unstage;
+        window.onblur = unstage;
         document.body.appendChild(button);
       }
     })();
